@@ -15,6 +15,7 @@ export const commitCommand = new Command('commit')
   .description('Generate a Conventional Commit message from staged changes')
   .option('-d, --dry-run', 'Show the generated message without committing')
   .option('-m, --model <model>', 'Override the LLM model')
+  .option('-p, --provider <provider>', 'Override the LLM provider (deepseek/qwen/zhipu/moonshot/siliconflow/anthropic/openai)')
   .option('-l, --lang <lang>', 'Commit message language (en/zh)', 'en')
   .option('-a, --all', 'Include unstaged changes (git add -A)')
   .option('-y, --yes', 'Skip confirmation and commit immediately')
@@ -60,7 +61,7 @@ export const commitCommand = new Command('commit')
       spinner.color = 'yellow';
 
       const llm = new LLMClient({
-        provider: config.provider || 'anthropic',
+        provider: (options.provider as any) || config.provider || 'deepseek',
         apiKey: config.apiKey!,
         model: options.model || config.model,
         maxTokens: config.maxTokens,

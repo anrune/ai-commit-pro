@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import { Command } from 'commander';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { Command } from 'commander';
 import { commitCommand } from './commands/commit.js';
 import { prCommand } from './commands/pr.js';
 import { changelogCommand } from './commands/changelog.js';
@@ -35,12 +35,13 @@ program
 
 🔧 Configuration:
   Set your API key via environment variable:
-    export ANTHROPIC_API_KEY=sk-ant-xxx   # for Claude
-    export OPENAI_API_KEY=sk-xxx          # for GPT
+    export DEEPSEEK_API_KEY=sk-xxx      # DeepSeek (国内推荐)
+    export ANTHROPIC_API_KEY=sk-ant-xxx # Claude
+    export OPENAI_API_KEY=sk-xxx        # GPT
 
   Or create a config file (.ai-commit.yml):
-    provider: anthropic
-    apiKey: sk-ant-xxx
+    provider: deepseek
+    apiKey: sk-xxx
 
 📦 Resources:
   GitHub: https://github.com/anrune/ai-commit-pro
@@ -54,10 +55,15 @@ program.addCommand(prCommand);
 program.addCommand(changelogCommand);
 program.addCommand(releaseCommand);
 
-// 默认行为 → 执行 commit 命令
-program.action(() => {
-  // 当没有子命令匹配时，执行 commit
-  commitCommand.parse([...process.argv.slice(2)]);
-});
+// ── 智能路由：无子命令时自动走 commit ──
+const KNOWN = ['commit', 'c', 'pr', 'p', 'changelog', 'cl', 'release', 'r',
+               'help', '-h', '--help', '-v', '--version'];
+const args = process.argv.slice(2);
+const hasSubcommand = args.length > 0 && KNOWN.includes(args[0]);
 
-program.parse();
+if (!hasSubcommand) {
+  // 直接把参数传给 commit 命令执行
+  await commitCommand.parseAsync([...args], { from: 'user' });
+} else {
+  program.parse();
+}
