@@ -7,6 +7,7 @@ import { commitCommand } from './commands/commit.js';
 import { prCommand } from './commands/pr.js';
 import { changelogCommand } from './commands/changelog.js';
 import { releaseCommand } from './commands/release.js';
+import { providersCommand } from './commands/providers.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -54,10 +55,11 @@ program.addCommand(commitCommand);
 program.addCommand(prCommand);
 program.addCommand(changelogCommand);
 program.addCommand(releaseCommand);
+program.addCommand(providersCommand);
 
 // ── 智能路由：无子命令时自动走 commit ──
 const KNOWN = ['commit', 'c', 'pr', 'p', 'changelog', 'cl', 'release', 'r',
-               'help', '-h', '--help', '-v', '--version'];
+               'providers', 'ls', 'help', '-h', '--help', '-v', '--version'];
 const args = process.argv.slice(2);
 const hasSubcommand = args.length > 0 && KNOWN.includes(args[0]);
 
