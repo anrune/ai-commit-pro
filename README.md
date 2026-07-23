@@ -1,129 +1,142 @@
 # 🦾 AI Commit Pro
 
-> 不只是"又一个 AI commit 工具"——而是 **Git 工作流的 AI 增强层**。  
-> 覆盖从 commit 到 release 的完整文档链。
+> 不只是"又一个 AI commit 工具"——而是 **Git 工作流的 AI 增强层**。覆盖从 commit 到 release 的完整文档链。
+>
+> Not just another AI commit tool — an **AI enhancement layer for your Git workflow**. Covers the entire documentation chain from commit to release.
 
 [![CI](https://github.com/anrune/ai-commit-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/anrune/ai-commit-pro/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/ai-commit-pro.svg)](https://www.npmjs.com/package/ai-commit-pro)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![node >= 18](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
+[![node >= 20](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 
-## ✨ Features
+---
+
+## ✨ Features / 功能
 
 - 🤖 **AI Commit** — 从 staged diff 生成 Conventional Commit message
 - 📋 **AI PR** — 从分支 diff 生成 PR 标题 + 正文
 - 📝 **AI Changelog** — 从 commit 历史生成结构化 CHANGELOG.md
 - 🚀 **AI Release** — 生成 GitHub Release Notes
-- 🎨 **自定义模板** — 通过 Handlebars 模板自定义 prompt
-- 🔌 **多 Provider** — 国外 Anthropic/OpenAI + 国内 DeepSeek/通义千问/智谱/Kimi/硅基流动
-- 💰 **成本透明** — 显示每次调用的 token 消耗和费用
+- 🇨🇳 **国内模型优先** — DeepSeek / 通义千问 / 智谱 GLM / Kimi / 硅基流动，均支持
+- 🌍 **国际模型兼容** — Anthropic Claude & OpenAI GPT
+- 🎨 **模板可定制** — Handlebars 模板，团队可统一 prompt 风格
+- 🔍 **Provider 自动检测** — 配置好 API Key，自动识别用哪个平台
+- 💰 **成本透明** — 每次调用显示 token 消耗和费用
 
-## 📸 Demo
+---
 
-<!-- TODO: 录制终端 GIF -->
+## 📸 Demo / 演示
 
 ```bash
 $ git add src/
-$ ai-commit
+$ ai-commit --lang zh
 
-Reading changes... ✓ Found staged changes on branch feat/new-parser (42 lines)
-AI is analyzing your changes... ✓ Generated in 1.8s
+✔ Found staged changes on branch feat/dark-mode (42 lines)
+✔ Generated in 1.4s
 
 ────────────────────────────────────────────────────────────
-feat(parser): add streaming JSON parser with error recovery
+feat(theme): 新增深色模式，支持系统偏好自动检测
 
-Implement a new JSON parser that supports incremental parsing
-and can recover from common syntax errors. The parser emits
-tokens as they become available rather than waiting for the
-complete input.
-
-BREAKING CHANGE: Parser API now returns AsyncIterator instead
-of the previous callback-based interface.
+- 新增 ThemeProvider，支持 light/dark/system 三种模式
+- 用 CSS 变量替换硬编码颜色，实现主题切换
+- 用户偏好持久化到 localStorage
 ────────────────────────────────────────────────────────────
-Tokens: 320 in + 89 out  |  Cost: $0.0023
+Tokens: 1333 in + 21 out  |  Cost: $0.0002
 
-Commit with this message? [Y/n/e] (y=commit, n=cancel, e=open editor to edit): y
-✓ Committed to feat/new-parser 🎉
+Commit with this message? [Y/n/e] y
+✔ Committed to feat/dark-mode 🎉
 ```
 
-## 🚀 Quick Start
+<!-- TODO: 录制终端 GIF 替换上面的文字 demo -->
+
+---
+
+## 🚀 Quick Start / 快速开始
 
 ```bash
-# 安装
+# 安装 / Install
 npm install -g ai-commit-pro
 
-# 配置 API Key（二选一，国内用户推荐 DeepSeek）
-export DEEPSEEK_API_KEY=sk-xxx       # DeepSeek 极低成本，国内首选
-# export ANTHROPIC_API_KEY=sk-ant-xxx  # Claude 最佳效果
-# export DASHSCOPE_API_KEY=sk-xxx      # 通义千问
+# 配置 API Key（国内推荐 DeepSeek，极低成本）
+# Configure API key (DeepSeek recommended for best value)
+export DEEPSEEK_API_KEY=sk-xxx
 
-# 暂存修改
+# 暂存修改 / Stage changes
 git add .
 
-# 生成 commit
+# 生成 commit / Generate commit message
 ai-commit
 ```
 
-## 📖 Usage
+> 💡 **不需要指定 provider** — ai-commit 自动检测你配了哪个 API Key。
+>
+> **No need to specify provider** — ai-commit auto-detects which API key you set.
 
-### Commit (`ai-commit`)
+---
+
+## 📖 Usage / 使用
+
+### Commit（`ai-commit`）
 
 ```bash
 ai-commit                  # 从 staged diff 生成 commit message
-ai-commit --dry-run        # 预览，不执行提交
-ai-commit --yes            # 跳过确认，直接提交
-ai-commit --all            # 自动 stage 所有修改
-ai-commit --lang zh        # 生成中文 commit message
-ai-commit --model gpt-4o   # 指定模型
+ai-commit --dry-run        # 预览，不执行提交 / preview only
+ai-commit --yes            # 跳过确认，直接提交 / skip confirmation
+ai-commit --lang zh        # 中文 commit message / Chinese output
+ai-commit --provider deepseek  # 指定 Provider / override provider
+ai-commit --model deepseek-chat  # 指定模型 / override model
 ```
 
-### PR (`ai-commit pr`)
+### PR（`ai-commit pr`）
 
 ```bash
-ai-commit pr                          # 生成 PR（对比 main）
-ai-commit pr --target develop         # 指定目标分支
-ai-commit pr --dry-run                # 仅预览
+ai-commit pr                          # 生成 PR 描述（对比 main）
+ai-commit pr --target develop         # 指定目标分支 / target branch
+ai-commit pr --dry-run                # 仅预览 / preview only
 ```
 
-### Changelog (`ai-commit changelog`)
+### Changelog（`ai-commit changelog`）
 
 ```bash
 ai-commit changelog                          # 从最近 50 条 commit 生成
-ai-commit changelog --from v1.0.0 --to HEAD  # 指定范围
-ai-commit changelog --output CHANGELOG.md     # 写入文件
-ai-commit changelog --append                  # 追加到已有文件
+ai-commit changelog --from v1.0.0 --to HEAD  # 指定范围 / specify range
+ai-commit changelog --output CHANGELOG.md     # 写入文件 / write to file
 ```
 
-### Release (`ai-commit release`)
+### Release（`ai-commit release`）
 
 ```bash
-ai-commit release --from v1.0.0 --version v1.1.0   # 生成 Release Notes
-ai-commit release --from v1.0.0 --publish           # 配合 gh CLI 发布
+ai-commit release --from v1.0.0 --version v1.1.0  # 生成 Release Notes
 ```
 
-## 🔧 Configuration
-
-### 方式 1：环境变量
+### Providers（`ai-commit providers`）
 
 ```bash
-# 国内推荐
-export DEEPSEEK_API_KEY=sk-xxx        # DeepSeek 极低成本
-export AI_COMMIT_PROVIDER=deepseek
-export AI_COMMIT_LANG=zh
-
-# 也可以
-export DASHSCOPE_API_KEY=sk-xxx       # 通义千问
-export ZHIPU_API_KEY=xxx              # 智谱 GLM
-export MOONSHOT_API_KEY=sk-xxx        # Kimi
-export SILICONFLOW_API_KEY=sk-xxx     # 硅基流动
-
-# 国外
-export ANTHROPIC_API_KEY=sk-ant-xxx   # Claude
-export OPENAI_API_KEY=sk-xxx          # GPT
+ai-commit providers  # 列出所有支持的模型平台 / list all providers
 ```
 
-> 💡 **不需要指定 provider** —— ai-commit 会自动检测你配置了哪个 API Key。
+---
 
-### 方式 2：配置文件
+## 🔧 Configuration / 配置
+
+### 方式 1：环境变量 / Environment Variables
+
+```bash
+# 🇨🇳 国内 / China
+export DEEPSEEK_API_KEY=sk-xxx       # DeepSeek（推荐 / recommended）
+export DASHSCOPE_API_KEY=sk-xxx      # 通义千问 / Qwen
+export ZHIPU_API_KEY=xxx             # 智谱 GLM（免费 / free）
+export MOONSHOT_API_KEY=sk-xxx       # Kimi / Moonshot
+export SILICONFLOW_API_KEY=sk-xxx    # 硅基流动 / SiliconFlow
+
+# 🌍 国际 / Global
+export ANTHROPIC_API_KEY=sk-ant-xxx  # Claude
+export OPENAI_API_KEY=sk-xxx         # GPT
+```
+
+> 💡 不需要配 `AI_COMMIT_PROVIDER`，配好 Key 后自动检测。
+
+### 方式 2：配置文件 / Config File
 
 在项目根目录创建 `.ai-commit.yml`：
 
@@ -133,65 +146,64 @@ provider: deepseek
 apiKey: sk-xxx
 model: deepseek-chat
 lang: zh
-
-# 或用通义千问
-# provider: qwen
-# apiKey: sk-xxx
-# model: qwen-plus
 ```
 
-支持的配置文件格式：`.ai-commit.yml`、`.ai-commit.json`、`.ai-commitrc`、`ai-commit.config.js`
+支持格式：`.ai-commit.yml`、`.ai-commit.json`、`.ai-commitrc`、`ai-commit.config.js`
 
-### 方式 3：自定义 Prompt 模板
+### 方式 3：自定义 Prompt 模板 / Custom Templates
 
 ```bash
 mkdir -p .ai-commit/templates
-
-# 复制内置模板进行修改
+# 复制内置模板进行修改 / Copy and modify built-in template
 cp node_modules/ai-commit-pro/dist/templates/commit.hbs .ai-commit/templates/
-# 编辑 .ai-commit/templates/commit.hbs 后即可生效
+# 编辑后立即生效 / Takes effect immediately
 ```
 
-## 📦 Supported Models
+---
 
-### 🌍 国际
+## 📦 Supported Models / 支持的模型
 
-| Provider  | Model             | Input $/1M tok | Output $/1M tok | 特点 |
-|-----------|-------------------|----------------|-----------------|------|
-| Anthropic | claude-sonnet-4-6 | $3.00          | $15.00          | 最佳代码理解 |
-| Anthropic | claude-haiku-4-5  | $0.80          | $4.00           | 快速便宜 |
-| OpenAI    | gpt-4o            | $2.50          | $10.00          | 综合能力强 |
-| OpenAI    | gpt-4o-mini       | $0.15          | $0.60           | 极低成本 |
+### 🇨🇳 国内（China）
 
-### 🇨🇳 国内
+| Provider | Model | Price / 价格 | Registration / 注册 |
+|----------|-------|-------------|---------------------|
+| **DeepSeek** ⭐ | deepseek-chat | ¥1/M in · ¥2/M out | [platform.deepseek.com](https://platform.deepseek.com/) |
+| 通义千问 | qwen-plus | ¥4/M in · ¥16/M out | [dashscope.console.aliyun.com](https://dashscope.console.aliyun.com/) |
+| 智谱 GLM | glm-4-flash | **免费 / Free** | [open.bigmodel.cn](https://open.bigmodel.cn/) |
+| Kimi | moonshot-v1-8k | ¥12/M in · ¥36/M out | [platform.moonshot.cn](https://platform.moonshot.cn/) |
+| 硅基流动 | Qwen3-235B-A22B | ¥2/M in · ¥6/M out | [cloud.siliconflow.cn](https://cloud.siliconflow.cn/) |
 
-| Provider     | Model                 | Input ¥/1M tok | Output ¥/1M tok | 注册地址 |
-|-------------|----------------------|----------------|-----------------|----------|
-| DeepSeek    | deepseek-chat         | ¥1             | ¥2              | [platform.deepseek.com](https://platform.deepseek.com/) |
-| 通义千问     | qwen-plus             | ¥4             | ¥16             | [dashscope.console.aliyun.com](https://dashscope.console.aliyun.com/) |
-| 智谱 GLM    | glm-4-flash           | 免费           | 免费             | [open.bigmodel.cn](https://open.bigmodel.cn/) |
-| Kimi        | moonshot-v1-8k        | ¥12            | ¥36             | [platform.moonshot.cn](https://platform.moonshot.cn/) |
-| 硅基流动     | Qwen3-235B-A22B       | ¥2             | ¥6              | [cloud.siliconflow.cn](https://cloud.siliconflow.cn/) |
+> 💡 **推荐组合**：日常用 DeepSeek（极低成本 + 效果好），零成本体验用智谱 GLM-4-Flash（永久免费，新用户还送 2000 万 token）。
 
-> 💡 **推荐**：日常用 **DeepSeek**（便宜且效果好），需要最佳质量用 **Claude Sonnet**。
-> 智谱 GLM-4-Flash 完全免费，适合入门体验。
+### 🌍 国际（Global）
 
-## 🗺️ Roadmap
+| Provider | Model | Price / 价格 | 
+|----------|-------|-------------|
+| Anthropic | claude-sonnet-4-6 | $3/M in · $15/M out |
+| OpenAI | gpt-4o | $2.5/M in · $10/M out |
 
-- [x] `ai-commit` — Commit message generation
-- [x] `ai-commit pr` — PR description generation
-- [x] `ai-commit changelog` — Changelog generation
-- [x] `ai-commit release` — Release notes generation
-- [ ] Editor mode for message editing before commit
-- [ ] GitHub CLI integration (auto-create PR/release)
-- [ ] Git hooks integration (prepare-commit-msg)
-- [ ] Multi-language output support
-- [ ] Custom Conventional Commit presets
+---
 
-## 🤝 Contributing
+## 🗺️ Roadmap / 路线图
+
+- [x] `ai-commit` — Commit message generation / 提交信息生成
+- [x] `ai-commit pr` — PR description generation / PR 描述生成
+- [x] `ai-commit changelog` — Changelog generation / 变更日志生成
+- [x] `ai-commit release` — Release notes generation / 发布说明生成
+- [x] `ai-commit providers` — List supported providers / 列出模型平台
+- [x] 🇨🇳 Chinese provider support (DeepSeek, Qwen, GLM, Kimi, SiliconFlow)
+- [x] 🇨🇳 Chinese commit message output
+- [ ] Editor mode — 提交前手动编辑 message
+- [ ] GitHub CLI integration — `--create` 直接创建 PR/Release
+- [ ] Git hooks — `prepare-commit-msg` hook 集成
+- [ ] Team config — 团队共享 `.ai-commit.yml` 模板
+
+---
+
+## 🤝 Contributing / 贡献
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md)
 
-## 📄 License
+## 📄 License / 协议
 
 MIT © [anrune](https://github.com/anrune)
