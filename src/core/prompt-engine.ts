@@ -7,6 +7,11 @@ import type { PromptContext } from '../types/index.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// 注册 Handlebars 自定义 helper
+Handlebars.registerHelper('eq', function (a: unknown, b: unknown) {
+  return a === b;
+});
+
 /**
  * 模板引擎 —— 加载、编译、渲染 prompt 模板。
  *
