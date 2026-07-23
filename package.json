@@ -1,6 +1,6 @@
 {
   "name": "ai-commit-pro",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "AI-powered Git workflow assistant — commit, PR, changelog, release",
   "type": "module",
   "main": "dist/index.js",
@@ -8,8 +8,7 @@
     "ai-commit": "./dist/index.js"
   },
   "files": [
-    "dist",
-    "templates"
+    "dist"
   ],
   "scripts": {
     "dev": "tsc --watch",
@@ -38,7 +37,7 @@
     "url": "https://github.com/anrune/ai-commit-pro"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.113.0",
