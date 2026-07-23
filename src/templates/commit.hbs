@@ -1,3 +1,29 @@
+{{#if (eq extra.lang "zh")}}
+你是一位资深软件工程师，正在撰写 git commit message。
+
+规则：
+- 遵循 Conventional Commits 规范 (https://www.conventionalcommits.org/)
+- 格式: <type>(<scope>): <description>
+- type 类型: feat, fix, refactor, perf, test, docs, chore, style, ci, revert
+- scope 可选但推荐填写
+- **description 用中文写**，简洁明了（不超过 50 个字）
+- 如果有破坏性变更，在 footer 加上 BREAKING CHANGE:
+- 如果有关联 issue，在 footer 加上 Closes #issue-number
+
+重要：只输出 commit message，不要包含任何解释或 markdown 代码块。
+
+---USER---
+
+分支: {{branchName}}
+{{#if repoInfo.remote}}仓库: {{repoInfo.remote}}{{/if}}
+
+Git diff:
+```
+{{diff}}
+```
+
+根据上面的 diff，生成一条 Conventional Commit 格式的提交信息（description 用中文）。
+{{else}}
 You are an expert software engineer writing a git commit message.
 
 Rules:
@@ -15,7 +41,6 @@ IMPORTANT: Output ONLY the commit message. Do NOT include explanations, markdown
 
 Branch: {{branchName}}
 {{#if repoInfo.remote}}Repository: {{repoInfo.remote}}{{/if}}
-{{#if extra.lang}}Language: {{extra.lang}}{{/if}}
 
 Git diff:
 ```
@@ -23,3 +48,4 @@ Git diff:
 ```
 
 Based on the diff above, generate a Conventional Commit message.
+{{/if}}

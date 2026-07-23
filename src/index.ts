@@ -33,6 +33,7 @@ program
   ai-commit pr             Generate a PR description from branch diff
   ai-commit changelog      Generate CHANGELOG.md from commit history
   ai-commit release        Generate GitHub Release Notes
+  ai-commit providers      List all supported LLM providers
 
 🔧 Configuration:
   Set your API key via environment variable:
