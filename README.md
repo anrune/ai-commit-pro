@@ -14,7 +14,7 @@
 - 📝 **AI Changelog** — 从 commit 历史生成结构化 CHANGELOG.md
 - 🚀 **AI Release** — 生成 GitHub Release Notes
 - 🎨 **自定义模板** — 通过 Handlebars 模板自定义 prompt
-- 🔌 **多 Provider** — 支持 Anthropic Claude & OpenAI GPT
+- 🔌 **多 Provider** — 国外 Anthropic/OpenAI + 国内 DeepSeek/通义千问/智谱/Kimi/硅基流动
 - 💰 **成本透明** — 显示每次调用的 token 消耗和费用
 
 ## 📸 Demo
@@ -51,10 +51,10 @@ Commit with this message? [Y/n/e] (y=commit, n=cancel, e=open editor to edit): y
 # 安装
 npm install -g ai-commit-pro
 
-# 配置 API Key
-export ANTHROPIC_API_KEY=sk-ant-xxx   # 推荐 Claude
-# 或
-export OPENAI_API_KEY=sk-xxx          # GPT
+# 配置 API Key（二选一，国内用户推荐 DeepSeek）
+export DEEPSEEK_API_KEY=sk-xxx       # DeepSeek 极低成本，国内首选
+# export ANTHROPIC_API_KEY=sk-ant-xxx  # Claude 最佳效果
+# export DASHSCOPE_API_KEY=sk-xxx      # 通义千问
 
 # 暂存修改
 git add .
@@ -105,21 +105,39 @@ ai-commit release --from v1.0.0 --publish           # 配合 gh CLI 发布
 ### 方式 1：环境变量
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-xxx
-export AI_COMMIT_MODEL=claude-sonnet-4-6
-export AI_COMMIT_LANG=en
+# 国内推荐
+export DEEPSEEK_API_KEY=sk-xxx        # DeepSeek 极低成本
+export AI_COMMIT_PROVIDER=deepseek
+export AI_COMMIT_LANG=zh
+
+# 也可以
+export DASHSCOPE_API_KEY=sk-xxx       # 通义千问
+export ZHIPU_API_KEY=xxx              # 智谱 GLM
+export MOONSHOT_API_KEY=sk-xxx        # Kimi
+export SILICONFLOW_API_KEY=sk-xxx     # 硅基流动
+
+# 国外
+export ANTHROPIC_API_KEY=sk-ant-xxx   # Claude
+export OPENAI_API_KEY=sk-xxx          # GPT
 ```
+
+> 💡 **不需要指定 provider** —— ai-commit 会自动检测你配置了哪个 API Key。
 
 ### 方式 2：配置文件
 
 在项目根目录创建 `.ai-commit.yml`：
 
 ```yaml
-provider: anthropic
-apiKey: sk-ant-xxx
-model: claude-sonnet-4-6
-lang: en
-maxTokens: 4096
+# 国内推荐 DeepSeek
+provider: deepseek
+apiKey: sk-xxx
+model: deepseek-chat
+lang: zh
+
+# 或用通义千问
+# provider: qwen
+# apiKey: sk-xxx
+# model: qwen-plus
 ```
 
 支持的配置文件格式：`.ai-commit.yml`、`.ai-commit.json`、`.ai-commitrc`、`ai-commit.config.js`
@@ -136,13 +154,27 @@ cp node_modules/ai-commit-pro/dist/templates/commit.hbs .ai-commit/templates/
 
 ## 📦 Supported Models
 
-| Provider  | Model               | Input $/1M tokens | Output $/1M tokens |
-|-----------|---------------------|-------------------|---------------------|
-| Anthropic | claude-sonnet-4-6   | $3.00             | $15.00             |
-| Anthropic | claude-opus-4-8     | $15.00            | $75.00             |
-| Anthropic | claude-haiku-4-5    | $0.80             | $4.00              |
-| OpenAI    | gpt-4o              | $2.50             | $10.00             |
-| OpenAI    | gpt-4o-mini         | $0.15             | $0.60              |
+### 🌍 国际
+
+| Provider  | Model             | Input $/1M tok | Output $/1M tok | 特点 |
+|-----------|-------------------|----------------|-----------------|------|
+| Anthropic | claude-sonnet-4-6 | $3.00          | $15.00          | 最佳代码理解 |
+| Anthropic | claude-haiku-4-5  | $0.80          | $4.00           | 快速便宜 |
+| OpenAI    | gpt-4o            | $2.50          | $10.00          | 综合能力强 |
+| OpenAI    | gpt-4o-mini       | $0.15          | $0.60           | 极低成本 |
+
+### 🇨🇳 国内
+
+| Provider     | Model                 | Input ¥/1M tok | Output ¥/1M tok | 注册地址 |
+|-------------|----------------------|----------------|-----------------|----------|
+| DeepSeek    | deepseek-chat         | ¥1             | ¥2              | [platform.deepseek.com](https://platform.deepseek.com/) |
+| 通义千问     | qwen-plus             | ¥4             | ¥16             | [dashscope.console.aliyun.com](https://dashscope.console.aliyun.com/) |
+| 智谱 GLM    | glm-4-flash           | 免费           | 免费             | [open.bigmodel.cn](https://open.bigmodel.cn/) |
+| Kimi        | moonshot-v1-8k        | ¥12            | ¥36             | [platform.moonshot.cn](https://platform.moonshot.cn/) |
+| 硅基流动     | Qwen3-235B-A22B       | ¥2             | ¥6              | [cloud.siliconflow.cn](https://cloud.siliconflow.cn/) |
+
+> 💡 **推荐**：日常用 **DeepSeek**（便宜且效果好），需要最佳质量用 **Claude Sonnet**。
+> 智谱 GLM-4-Flash 完全免费，适合入门体验。
 
 ## 🗺️ Roadmap
 

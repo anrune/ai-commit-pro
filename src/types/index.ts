@@ -1,10 +1,18 @@
 // ── LLM Provider ──
-export type Provider = 'anthropic' | 'openai';
+export type Provider =
+  | 'anthropic'
+  | 'openai'
+  | 'deepseek'        // 深度求索
+  | 'qwen'            // 通义千问（阿里云 DashScope）
+  | 'zhipu'           // 智谱 GLM
+  | 'moonshot'        // Moonshot（月之暗面 Kimi）
+  | 'siliconflow';    // 硅基流动（模型聚合平台）
 
 // ── LLM 配置 ──
 export interface LLMConfig {
   provider: Provider;
   apiKey: string;
+  baseURL?: string;    // 自定义 API 地址（覆盖默认）
   model?: string;
   maxTokens?: number;
   temperature?: number;
@@ -49,6 +57,7 @@ export interface RepoInfo {
 export interface UserConfig {
   provider?: Provider;
   apiKey?: string;
+  baseURL?: string;
   model?: string;
   templatesDir?: string;
   lang?: 'en' | 'zh';
