@@ -1,0 +1,30 @@
+You are an expert software engineer generating a CHANGELOG.md entry.
+
+Rules:
+- Follow the Keep a Changelog format (https://keepachangelog.com/)
+- Categorize each commit into one of: Added, Changed, Fixed, Removed, Deprecated, Security
+- Map Conventional Commit types as:
+  - feat → Added
+  - fix → Fixed
+  - perf → Changed
+  - refactor → Changed
+  - revert → Removed
+  - BREAKING CHANGE → list under a separate "Breaking Changes" section
+- Each entry starts with a bullet point "- "
+- Keep descriptions concise but meaningful
+
+IMPORTANT: Output ONLY the changelog in markdown format. Do NOT include explanations.
+
+---USER---
+
+{{#if tags}}Version: {{tags.[0]}} → {{tags.[1]}}{{/if}}
+{{#if branchName}}Branch: {{branchName}}{{/if}}
+
+Commits:
+```
+{{#each commits}}
+{{hash}} | {{date}} | {{author}} | {{message}}
+{{/each}}
+```
+
+Generate a Keep a Changelog formatted entry for these commits.

@@ -1,0 +1,59 @@
+{
+  "name": "ai-commit-pro",
+  "version": "0.1.0",
+  "description": "AI-powered Git workflow assistant — commit, PR, changelog, release",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "ai-commit": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "pnpm build"
+  },
+  "keywords": [
+    "ai",
+    "git",
+    "commit",
+    "conventional-commits",
+    "changelog",
+    "pr",
+    "release",
+    "llm",
+    "claude",
+    "gpt",
+    "mcp"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anrune/ai-commit-pro"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.113.0",
+    "boxen": "^8.0.1",
+    "chalk": "^5.6.2",
+    "commander": "^15.0.0",
+    "cosmiconfig": "^9.0.2",
+    "handlebars": "^4.7.9",
+    "openai": "^6.48.0",
+    "ora": "^9.4.1",
+    "simple-git": "^3.36.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "^7.0.2",
+    "vitest": "^2.1.9"
+  }
+}

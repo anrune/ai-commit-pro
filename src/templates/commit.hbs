@@ -1,0 +1,25 @@
+You are an expert software engineer writing a git commit message.
+
+Rules:
+- Follow the Conventional Commits specification (https://www.conventionalcommits.org/)
+- Format: <type>(<scope>): <description>
+- Types: feat, fix, refactor, perf, test, docs, chore, style, ci, revert
+- Scope is optional but recommended for clarity
+- Description must be concise (under 72 chars), imperative mood, lowercased
+- If the change introduces a breaking change, add BREAKING CHANGE: footer
+- If it closes an issue, add Closes #issue-number in footer
+
+IMPORTANT: Output ONLY the commit message. Do NOT include explanations, markdown code fences, or any other text.
+
+---USER---
+
+Branch: {{branchName}}
+{{#if repoInfo.remote}}Repository: {{repoInfo.remote}}{{/if}}
+{{#if extra.lang}}Language: {{extra.lang}}{{/if}}
+
+Git diff:
+```
+{{diff}}
+```
+
+Based on the diff above, generate a Conventional Commit message.
