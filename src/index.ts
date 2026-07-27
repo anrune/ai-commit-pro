@@ -37,9 +37,14 @@ program
 
 🔧 Configuration:
   Set your API key via environment variable:
-    export DEEPSEEK_API_KEY=sk-xxx      # DeepSeek (国内推荐)
-    export ANTHROPIC_API_KEY=sk-ant-xxx # Claude
-    export OPENAI_API_KEY=sk-xxx        # GPT
+    macOS/Linux:
+      export DEEPSEEK_API_KEY=sk-xxx      # DeepSeek（推荐）
+      export DASHSCOPE_API_KEY=sk-xxx     # 通义千问
+      export ZHIPU_API_KEY=xxx            # 智谱 GLM
+    Windows PowerShell:
+      $env:DEEPSEEK_API_KEY = "sk-xxx"    # DeepSeek（推荐）
+      $env:DASHSCOPE_API_KEY = "sk-xxx"   # 通义千问
+      $env:ZHIPU_API_KEY = "xxx"          # 智谱 GLM
 
   Or create a config file (.ai-commit.yml):
     provider: deepseek

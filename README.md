@@ -20,7 +20,6 @@
 - 📝 **AI Changelog** — 从 commit 历史生成结构化 CHANGELOG.md
 - 🚀 **AI Release** — 生成 GitHub Release Notes
 - 🇨🇳 **国内模型优先** — DeepSeek / 通义千问 / 智谱 GLM / Kimi / 硅基流动
-- 🌍 **国际模型兼容** — Anthropic Claude & OpenAI GPT
 - 🎨 **模板可定制** — Handlebars 模板，团队可统一 prompt 风格
 - 🔍 **Provider 自动检测** — 配置好 API Key，自动识别用哪个平台
 - 💰 **成本透明** — 每次调用显示 token 消耗和费用
@@ -83,7 +82,7 @@ ai-commit --dry-run        # 预览，不执行提交
 ai-commit --yes            # 跳过确认，直接提交
 ai-commit --lang zh        # 中文 commit message
 ai-commit --provider deepseek  # 指定 Provider
-ai-commit --model deepseek-chat  # 指定模型
+ai-commit --model deepseek-v4-flash  # 指定模型
 ```
 
 ### PR（`ai-commit pr`）
@@ -105,7 +104,7 @@ ai-commit changelog --output CHANGELOG.md     # 写入文件
 ### Release（`ai-commit release`）
 
 ```bash
-ai-commit release --from v1.0.0 --version v1.1.0  # 生成 Release Notes
+ai-commit release --from v1.0.0 --release-version v1.1.0  # 生成 Release Notes
 ```
 
 ### Providers（`ai-commit providers`）
@@ -120,17 +119,27 @@ ai-commit providers  # 列出所有支持的模型平台
 
 ### 方式 1：环境变量
 
+**macOS / Linux：**
+
 ```bash
-# 国内
 export DEEPSEEK_API_KEY=sk-xxx       # DeepSeek（推荐）
 export DASHSCOPE_API_KEY=sk-xxx      # 通义千问
-export ZHIPU_API_KEY=xxx             # 智谱 GLM（免费）
+export ZHIPU_API_KEY=xxx             # 智谱 GLM
 export MOONSHOT_API_KEY=sk-xxx       # Kimi
 export SILICONFLOW_API_KEY=sk-xxx    # 硅基流动
 
-# 国际
-export ANTHROPIC_API_KEY=sk-ant-xxx  # Claude
-export OPENAI_API_KEY=sk-xxx         # GPT
+```
+
+**Windows PowerShell：**
+
+```powershell
+$env:DEEPSEEK_API_KEY = "sk-xxx"     # DeepSeek（推荐）
+$env:DASHSCOPE_API_KEY = "sk-xxx"    # 通义千问
+$env:ZHIPU_API_KEY = "xxx"           # 智谱 GLM
+$env:MOONSHOT_API_KEY = "sk-xxx"     # Kimi
+$env:SILICONFLOW_API_KEY = "sk-xxx"  # 硅基流动
+```
+
 ```
 
 > 💡 不需要配 `AI_COMMIT_PROVIDER`，配好 Key 后自动检测。
@@ -142,7 +151,7 @@ export OPENAI_API_KEY=sk-xxx         # GPT
 ```yaml
 provider: deepseek
 apiKey: sk-xxx
-model: deepseek-chat
+model: deepseek-v4-flash
 lang: zh
 ```
 
@@ -164,22 +173,17 @@ cp node_modules/ai-commit-pro/dist/templates/commit.hbs .ai-commit/templates/
 
 | Provider | 模型 | 价格 | 注册 |
 |----------|------|------|------|
-| **DeepSeek** ⭐ | deepseek-chat | ¥1/M 入 · ¥2/M 出 | [platform.deepseek.com](https://platform.deepseek.com/) |
-| 通义千问 | qwen-plus | ¥4/M 入 · ¥16/M 出 | [dashscope.console.aliyun.com](https://dashscope.console.aliyun.com/) |
-| 智谱 GLM | glm-4-flash | **免费** | [open.bigmodel.cn](https://open.bigmodel.cn/) |
-| Kimi | moonshot-v1-8k | ¥12/M 入 · ¥36/M 出 | [platform.moonshot.cn](https://platform.moonshot.cn/) |
+| **DeepSeek** ⭐ | deepseek-v4-flash | ¥1/M 入 · ¥2/M 出 | [platform.deepseek.com](https://platform.deepseek.com/) |
+| 通义千问 | qwen-plus | ¥0.8/M 入 · ¥2/M 出 | [dashscope.console.aliyun.com](https://dashscope.console.aliyun.com/) |
+| 智谱 GLM | glm-4-flash | ¥0 入 · ¥0 出 | [open.bigmodel.cn](https://open.bigmodel.cn/) |
+| Kimi | kimi-k2.5 | ¥1.4/M 入 · ¥14/M 出 | [platform.moonshot.cn](https://platform.moonshot.cn/) |
 | 硅基流动 | Qwen3-235B-A22B | ¥2/M 入 · ¥6/M 出 | [cloud.siliconflow.cn](https://cloud.siliconflow.cn/) |
 
-> 💡 **推荐组合**：日常用 DeepSeek（极低成本 + 效果好），零成本体验用智谱 GLM-4-Flash（永久免费，新用户还送 2000 万 token）。
+> 💡 **注意**：DeepSeek 的 `deepseek-chat` 已于 2026-07-24 废弃，默认模型已切换为 `deepseek-v4-flash`。
 
-### 🌍 国际
+> 💡 **推荐组合**：日常用 DeepSeek（极低成本 + 效果好），偶尔切通义千问或智谱 GLM 作为补充。
 
-| Provider | 模型 | 价格 |
-|----------|------|------|
-| Anthropic | claude-sonnet-4-6 | $3/M 入 · $15/M 出 |
-| OpenAI | gpt-4o | $2.5/M 入 · $10/M 出 |
 
----
 
 ## 🗺️ 路线图
 

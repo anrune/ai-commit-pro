@@ -35,7 +35,7 @@ export const changelogCommand = new Command('changelog')
         process.exit(1);
       }
 
-      // 确定起始点
+      // 确定起始点：优先用 --from，否则用最新 tag，都没有就用最近 50 条
       let from = options.from;
       if (!from) {
         const latestTag = await git.getLatestTag();
@@ -44,9 +44,17 @@ export const changelogCommand = new Command('changelog')
 
       // 读取 commit 历史
       spinner.start('Reading commit history...');
-      const logResult = from
+      let logResult = from
         ? await git.getCommitsBetween(from, options.to)
         : await git.getRecentCommits(50);
+
+      // 如果 tag 之间没有新 commit（HEAD == tag），回退到最近 50 条
+      let autoFallback = false;
+      if (logResult.all.length === 0 && from) {
+        logResult = await git.getRecentCommits(50);
+        from = undefined;
+        autoFallback = true;
+      }
 
       const commits = logResult.all.map((c) => ({
         hash: c.hash,
@@ -70,7 +78,7 @@ export const changelogCommand = new Command('changelog')
       spinner.color = 'yellow';
 
       const llm = new LLMClient({
-        provider: config.provider || 'anthropic',
+        provider: config.provider || 'deepseek',
         apiKey: config.apiKey!,
         model: options.model || config.model,
         maxTokens: config.maxTokens,

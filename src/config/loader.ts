@@ -3,18 +3,16 @@ import type { UserConfig, Provider } from '../types/index.js';
 
 // ── 各 Provider 对应的 API Key 环境变量名 ──
 const PROVIDER_KEY_ENV: Record<Provider, string> = {
-  anthropic: 'ANTHROPIC_API_KEY',
-  openai: 'OPENAI_API_KEY',
   deepseek: 'DEEPSEEK_API_KEY',
-  qwen: 'DASHSCOPE_API_KEY',           // 阿里云 DashScope
-  zhipu: 'ZHIPU_API_KEY',             // 智谱
-  moonshot: 'MOONSHOT_API_KEY',        // 月之暗面
-  siliconflow: 'SILICONFLOW_API_KEY',  // 硅基流动
+  qwen: 'DASHSCOPE_API_KEY',
+  zhipu: 'ZHIPU_API_KEY',
+  moonshot: 'MOONSHOT_API_KEY',
+  siliconflow: 'SILICONFLOW_API_KEY',
 };
 
 // ── 有效 Provider 列表 ──
 const VALID_PROVIDERS: Provider[] = [
-  'anthropic', 'openai', 'deepseek', 'qwen', 'zhipu', 'moonshot', 'siliconflow',
+  'deepseek', 'qwen', 'zhipu', 'moonshot', 'siliconflow',
 ];
 
 /**
@@ -80,11 +78,7 @@ function resolveApiKey(provider: Provider, fileConfig: UserConfig): string | und
   const key = process.env[PROVIDER_KEY_ENV[provider]];
   if (key) return key;
 
-  // 2. 通用环境变量（任意 key 都尝试）
-  if (process.env.ANTHROPIC_API_KEY) return process.env.ANTHROPIC_API_KEY;
-  if (process.env.OPENAI_API_KEY) return process.env.OPENAI_API_KEY;
-
-  // 3. 配置文件
+  // 2. 配置文件
   if (fileConfig.apiKey) return fileConfig.apiKey;
 
   return undefined;
@@ -100,8 +94,6 @@ export function checkApiKey(config: UserConfig): { ok: true } | { ok: false; mes
   const envVar = PROVIDER_KEY_ENV[provider];
 
   const providerNames: Record<Provider, string> = {
-    anthropic: 'Anthropic Claude',
-    openai: 'OpenAI GPT',
     deepseek: 'DeepSeek（深度求索）',
     qwen: 'Qwen / 通义千问（阿里云 DashScope）',
     zhipu: 'GLM（智谱）',
@@ -110,8 +102,6 @@ export function checkApiKey(config: UserConfig): { ok: true } | { ok: false; mes
   };
 
   const registerUrls: Record<Provider, string> = {
-    anthropic: 'https://console.anthropic.com/',
-    openai: 'https://platform.openai.com/',
     deepseek: 'https://platform.deepseek.com/',
     qwen: 'https://dashscope.console.aliyun.com/',
     zhipu: 'https://open.bigmodel.cn/',

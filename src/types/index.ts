@@ -1,7 +1,5 @@
 // ── LLM Provider ──
 export type Provider =
-  | 'anthropic'
-  | 'openai'
   | 'deepseek'        // 深度求索
   | 'qwen'            // 通义千问（阿里云 DashScope）
   | 'zhipu'           // 智谱 GLM

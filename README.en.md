@@ -20,7 +20,6 @@
 - 📝 **AI Changelog** — Generate structured CHANGELOG.md from commit history
 - 🚀 **AI Release** — Generate GitHub Release Notes
 - 🇨🇳 **Chinese Providers** — DeepSeek / Qwen / GLM / Kimi / SiliconFlow
-- 🌍 **Global Providers** — Anthropic Claude & OpenAI GPT
 - 🎨 **Custom Templates** — Handlebars templates for team-wide consistency
 - 🔍 **Auto-Detection** — Set any API key, provider is detected automatically
 - 💰 **Cost Transparency** — Token usage and cost shown with every call
@@ -81,7 +80,7 @@ ai-commit --dry-run        # Preview without committing
 ai-commit --yes            # Skip confirmation
 ai-commit --lang zh        # Output in Chinese
 ai-commit --provider deepseek  # Override provider
-ai-commit --model deepseek-chat  # Override model
+ai-commit --model deepseek-v4-flash  # Override model
 ```
 
 ### PR
@@ -103,7 +102,7 @@ ai-commit changelog --output CHANGELOG.md     # Write to file
 ### Release
 
 ```bash
-ai-commit release --from v1.0.0 --version v1.1.0  # Generate Release Notes
+ai-commit release --from v1.0.0 --release-version v1.1.0  # Generate Release Notes
 ```
 
 ### Providers
@@ -118,17 +117,24 @@ ai-commit providers  # List all supported platforms
 
 ### Environment Variables
 
+**macOS / Linux:**
+
 ```bash
-# China
 export DEEPSEEK_API_KEY=sk-xxx       # DeepSeek (recommended)
 export DASHSCOPE_API_KEY=sk-xxx      # Qwen
-export ZHIPU_API_KEY=xxx             # GLM (free)
+export ZHIPU_API_KEY=xxx             # GLM
 export MOONSHOT_API_KEY=sk-xxx       # Kimi
 export SILICONFLOW_API_KEY=sk-xxx    # SiliconFlow
+```
 
-# Global
-export ANTHROPIC_API_KEY=sk-ant-xxx  # Claude
-export OPENAI_API_KEY=sk-xxx         # GPT
+**Windows PowerShell:**
+
+```powershell
+$env:DEEPSEEK_API_KEY = "sk-xxx"     # DeepSeek (recommended)
+$env:DASHSCOPE_API_KEY = "sk-xxx"    # Qwen
+$env:ZHIPU_API_KEY = "xxx"           # GLM
+$env:MOONSHOT_API_KEY = "sk-xxx"     # Kimi
+$env:SILICONFLOW_API_KEY = "sk-xxx"  # SiliconFlow
 ```
 
 ### Config File
@@ -138,7 +144,7 @@ Create `.ai-commit.yml` in your project root:
 ```yaml
 provider: deepseek
 apiKey: sk-xxx
-model: deepseek-chat
+model: deepseek-v4-flash
 lang: zh
 ```
 
@@ -162,20 +168,15 @@ Templates use Handlebars syntax. Separate system and user prompts with `---USER-
 
 | Provider | Model | Pricing | Sign Up |
 |----------|-------|---------|---------|
-| **DeepSeek** ⭐ | deepseek-chat | ¥1/M in · ¥2/M out | [platform.deepseek.com](https://platform.deepseek.com/) |
-| Qwen | qwen-plus | ¥4/M in · ¥16/M out | [dashscope.console.aliyun.com](https://dashscope.console.aliyun.com/) |
-| GLM | glm-4-flash | **Free** | [open.bigmodel.cn](https://open.bigmodel.cn/) |
-| Kimi | moonshot-v1-8k | ¥12/M in · ¥36/M out | [platform.moonshot.cn](https://platform.moonshot.cn/) |
+| **DeepSeek** ⭐ | deepseek-v4-flash | ¥1/M in · ¥2/M out | [platform.deepseek.com](https://platform.deepseek.com/) |
+| Qwen | qwen-plus | ¥0.8/M in · ¥2/M out | [dashscope.console.aliyun.com](https://dashscope.console.aliyun.com/) |
+| GLM | glm-4-flash | ¥0 / ¥0 | [open.bigmodel.cn](https://open.bigmodel.cn/) |
+| Kimi | kimi-k2.5 | ¥1.4/M in · ¥14/M out | [platform.moonshot.cn](https://platform.moonshot.cn/) |
 | SiliconFlow | Qwen3-235B-A22B | ¥2/M in · ¥6/M out | [cloud.siliconflow.cn](https://cloud.siliconflow.cn/) |
 
-> 💡 **Recommendation**: DeepSeek for daily use (ultra-low cost, great quality). GLM-4-Flash for zero-cost — permanently free with 20M bonus tokens for new users.
+> 💡 **Note**: DeepSeek's `deepseek-chat` was deprecated on 2026-07-24. Default model has been switched to `deepseek-v4-flash`.
 
-### 🌍 Global
-
-| Provider | Model | Pricing |
-|----------|-------|---------|
-| Anthropic | claude-sonnet-4-6 | $3/M in · $15/M out |
-| OpenAI | gpt-4o | $2.5/M in · $10/M out |
+> 💡 **Recommendation**: DeepSeek for daily use (ultra-low cost, great quality). Switch to Qwen or GLM as needed.
 
 ---
 

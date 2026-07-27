@@ -56,7 +56,7 @@ export const prCommand = new Command('pr')
       spinner.color = 'yellow';
 
       const llm = new LLMClient({
-        provider: config.provider || 'anthropic',
+        provider: config.provider || 'deepseek',
         apiKey: config.apiKey!,
         model: options.model || config.model,
         maxTokens: config.maxTokens,

@@ -14,7 +14,7 @@ export const releaseCommand = new Command('release')
   .description('Generate GitHub Release Notes')
   .option('-f, --from <tag>', 'Starting tag (required)')
   .option('-t, --to <tag>', 'Ending tag (default: HEAD)', 'HEAD')
-  .option('-v, --version <version>', 'Release version string')
+  .option('-r, --release-version <version>', 'Release version string')
   .option('-m, --model <model>', 'Override the LLM model')
   .option('--publish', 'Create release via GitHub API (requires gh CLI)')
   .action(async (options) => {
@@ -42,7 +42,7 @@ export const releaseCommand = new Command('release')
         process.exit(1);
       }
 
-      const version = options.version || options.to;
+      const version = options.releaseVersion || options.to;
 
       // 读取 commit 历史
       spinner.start(`Reading commits from ${from} to ${options.to}...`);
@@ -67,7 +67,7 @@ export const releaseCommand = new Command('release')
       spinner.color = 'yellow';
 
       const llm = new LLMClient({
-        provider: config.provider || 'anthropic',
+        provider: config.provider || 'deepseek',
         apiKey: config.apiKey!,
         model: options.model || config.model,
         maxTokens: config.maxTokens,

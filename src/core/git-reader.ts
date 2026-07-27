@@ -38,12 +38,25 @@ export class GitReader {
 
   /** 获取当前分支相对目标分支的 diff */
   async getBranchDiff(targetBranch: string = 'main'): Promise<string> {
-    try {
-      return await this.git.diff([`${targetBranch}...HEAD`]);
-    } catch {
-      // 如果目标分支不存在，尝试 origin/targetBranch
-      return this.git.diff([`origin/${targetBranch}...HEAD`]);
+    // 依次尝试本地、remote、常见别名（master）
+    const candidates = [
+      targetBranch,
+      `origin/${targetBranch}`,
+      // 如果 main 找不到，尝试 master（旧 repo 默认分支名）
+      ...(targetBranch === 'main' ? ['master', 'origin/master'] : []),
+    ];
+
+    for (const ref of candidates) {
+      try {
+        const result = await this.git.diff([`${ref}...HEAD`]);
+        return result;
+      } catch {
+        continue;
+      }
     }
+
+    // 全都没匹配到，回退到 targetBranch 让它报原始错误
+    return this.git.diff([`${targetBranch}...HEAD`]);
   }
 
   /** 获取两个引用之间的文件变更列表 */
