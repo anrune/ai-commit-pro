@@ -45,6 +45,11 @@ export class LLMClient {
 
   constructor(config: LLMConfig) {
     const defaults = PROVIDER_DEFAULTS[config.provider];
+    if (!defaults) {
+      throw new Error(
+        `Unknown provider "${config.provider}". Supported: ${Object.keys(PROVIDER_DEFAULTS).join(', ')}`,
+      );
+    }
 
     this.config = {
       provider: config.provider,

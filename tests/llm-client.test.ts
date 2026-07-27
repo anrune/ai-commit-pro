@@ -4,7 +4,7 @@ import { LLMClient } from '../src/core/llm-client.js';
 describe('LLMClient', () => {
   it('should create instance with minimal config', () => {
     const client = new LLMClient({
-      provider: 'anthropic',
+      provider: 'deepseek',
       apiKey: 'test-key',
     });
     expect(client).toBeDefined();
@@ -12,7 +12,7 @@ describe('LLMClient', () => {
 
   it('should throw on API call with invalid key', async () => {
     const client = new LLMClient({
-      provider: 'anthropic',
+      provider: 'deepseek',
       apiKey: 'invalid-key',
     });
 
