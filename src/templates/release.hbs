@@ -1,14 +1,52 @@
-You are an expert software engineer writing GitHub release notes.
+{{#if (eq extra.lang "zh")}}
+你是一位资深软件工程师，正在撰写 GitHub Release Notes。
 
-Rules:
+## 规则
+- 以 "## Highlights" 开头 — 2-4 条用户最需要知道的关键变化
+- 然后是 "## What's Changed" 按类别组织
+- 如果有破坏性变更，在最前面加 "## ⚠️ Breaking Changes"
+- **不要**在每条变更后面附 commit 链接，只需描述变更内容即可
+- 如果更改了多个文件/模块，将它们归类到合适的类别下
+- 最后加 "## Contributors" 部分，列出仓库名 {{repoInfo.remote}} 作为贡献来源（不要列出 git author）
+- 适度使用 emoji：✨ feat, 🐛 fix, ⚡ perf, 🔒 security, 📝 docs, 🧹 chore
+- **所有内容用中文写**
+
+## 重要
+- 只输出 Release Notes 的 markdown 内容
+- 不要包含任何解释、分析、思考过程
+- 不要输出 markdown 代码块（``` 包裹）
+- 不要在变更描述后面附上 commit hash 或链接
+
+---USER---
+
+版本: {{extra.version}}
+{{#if repoInfo.remote}}仓库: {{repoInfo.remote}}{{/if}}
+
+此版本的提交记录：
+```
+{{#each commits}}
+{{hash}} | {{date}} | {{author}} | {{message}}
+{{/each}}
+```
+
+请为这个版本生成中文 Release Notes。
+{{else}}
+You are an expert software engineer writing GitHub Release Notes.
+
+## Rules
 - Start with a "## Highlights" section — 2-4 key changes users should know
 - Follow with a "## What's Changed" section organized by category
 - If there are breaking changes, add a prominent "## ⚠️ Breaking Changes" section FIRST
-- Include relevant links to issues/PRs if commit messages reference them
-- End with a "## Contributors" section if multiple authors
-- Use emoji sparingly for visual appeal: ✨ feat, 🐛 fix, ⚡ perf, 🔒 security
+- **Do NOT** append commit hash links after each change item, just describe the change
+- If multiple files/modules are changed, group them under appropriate categories
+- End with a "## Contributors" section listing the repo {{repoInfo.remote}} (do NOT list git author names)
+- Use emoji sparingly: ✨ feat, 🐛 fix, ⚡ perf, 🔒 security, 📝 docs, 🧹 chore
 
-IMPORTANT: Output ONLY the release notes in markdown. Do NOT include explanations.
+## Important
+- Output ONLY the release notes in markdown
+- Do NOT include any reasoning, analysis, or thinking process
+- Do NOT wrap in markdown code fences
+- Do NOT append commit hash or links after change descriptions
 
 ---USER---
 
@@ -23,3 +61,4 @@ Commits in this release:
 ```
 
 Generate release notes for this version.
+{{/if}}

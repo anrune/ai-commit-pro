@@ -15,6 +15,7 @@ export const changelogCommand = new Command('changelog')
   .option('-f, --from <tag>', 'Starting tag or ref')
   .option('-t, --to <tag>', 'Ending tag or ref (default: HEAD)', 'HEAD')
   .option('-m, --model <model>', 'Override the LLM model')
+  .option('-l, --lang <lang>', 'Changelog language (en/zh)', 'en')
   .option('-o, --output <file>', 'Write to file instead of stdout')
   .option('-a, --append', 'Append to existing CHANGELOG.md')
   .action(async (options) => {
@@ -90,6 +91,7 @@ export const changelogCommand = new Command('changelog')
         branchName: await git.getCurrentBranch(),
         commits,
         tags,
+        extra: { lang: options.lang || 'en' },
       });
 
       const startTime = Date.now();

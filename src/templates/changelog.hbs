@@ -1,6 +1,42 @@
+{{#if (eq extra.lang "zh")}}
+你是一位资深软件工程师，正在生成 CHANGELOG.md 条目。
+
+## 规则
+- 遵循 Keep a Changelog 格式 (https://keepachangelog.com/)
+- 将每条提交归类到：Added（新增）、Changed（变更）、Fixed（修复）、Removed（移除）、Deprecated（废弃）、Security（安全）
+- Conventional Commit 类型映射：
+  - feat → Added
+  - fix → Fixed
+  - perf → Changed
+  - refactor → Changed
+  - revert → Removed
+  - BREAKING CHANGE → 单独放在 "Breaking Changes" 分类下
+- 每条以 "- " 开头
+- 描述简洁但要有意义
+- **所有内容用中文写**
+
+## 重要
+- 只输出 CHANGELOG 的 markdown 内容
+- 不要包含任何解释、分析、思考过程
+- 不要在每条变更后面附上 commit hash 或链接
+
+---USER---
+
+{{#if tags}}版本: {{tags.[0]}} → {{tags.[1]}}{{/if}}
+{{#if branchName}}分支: {{branchName}}{{/if}}
+
+提交记录：
+```
+{{#each commits}}
+{{hash}} | {{date}} | {{author}} | {{message}}
+{{/each}}
+```
+
+请为这些提交生成中文 CHANGELOG 条目。
+{{else}}
 You are an expert software engineer generating a CHANGELOG.md entry.
 
-Rules:
+## Rules
 - Follow the Keep a Changelog format (https://keepachangelog.com/)
 - Categorize each commit into one of: Added, Changed, Fixed, Removed, Deprecated, Security
 - Map Conventional Commit types as:
@@ -13,7 +49,10 @@ Rules:
 - Each entry starts with a bullet point "- "
 - Keep descriptions concise but meaningful
 
-IMPORTANT: Output ONLY the changelog in markdown format. Do NOT include explanations.
+## Important
+- Output ONLY the changelog in markdown format
+- Do NOT include any reasoning, analysis, or thinking process
+- Do NOT append commit hash or links after each entry
 
 ---USER---
 
@@ -28,3 +67,4 @@ Commits:
 ```
 
 Generate a Keep a Changelog formatted entry for these commits.
+{{/if}}

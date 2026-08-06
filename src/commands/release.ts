@@ -1,6 +1,10 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import ora from 'ora';
+import { execSync } from 'child_process';
+import { writeFileSync, unlinkSync } from 'fs';
+import { tmpdir } from 'os';
+import { join } from 'path';
 import { GitReader } from '../core/git-reader.js';
 import { LLMClient } from '../core/llm-client.js';
 import { PromptEngine } from '../core/prompt-engine.js';
@@ -16,9 +20,26 @@ export const releaseCommand = new Command('release')
   .option('-t, --to <tag>', 'Ending tag (default: HEAD)', 'HEAD')
   .option('-r, --release-version <version>', 'Release version string')
   .option('-m, --model <model>', 'Override the LLM model')
+  .option('-l, --lang <lang>', 'Release notes language (en/zh)', 'en')
   .option('--publish', 'Create release via GitHub API (requires gh CLI)')
   .action(async (options) => {
     const spinner = ora();
+
+    // 前置检查：--publish 需要 gh CLI
+    if (options.publish) {
+      try {
+        execSync('gh --version', { stdio: 'pipe' });
+      } catch {
+        console.log(fmt.error('The --publish flag requires GitHub CLI (`gh`).'));
+        console.log(chalk.dim('\n  Install:'));
+        console.log(chalk.dim('    Windows : winget install --id GitHub.cli'));
+        console.log(chalk.dim('    macOS   : brew install gh'));
+        console.log(chalk.dim('    Linux   : see https://github.com/cli/cli/blob/trunk/docs/install_linux.md'));
+        console.log(chalk.dim('\n  Then: gh auth login'));
+        console.log(chalk.dim('\n  Or run without --publish to preview the notes locally.'));
+        process.exit(1);
+      }
+    }
 
     try {
       const git = new GitReader();
@@ -85,7 +106,7 @@ export const releaseCommand = new Command('release')
         commits,
         repoInfo,
         tags: [from, options.to],
-        extra: { version },
+        extra: { version, lang: options.lang || 'en' },
       });
 
       const startTime = Date.now();
@@ -102,8 +123,21 @@ export const releaseCommand = new Command('release')
 
       // GitHub 发布
       if (options.publish) {
-        console.log(chalk.dim('\nTip: Use the following to create a GitHub release:'));
-        console.log(chalk.dim(`  gh release create ${version} --title "${version}" --notes-file -`));
+        const tmpFile = join(tmpdir(), `release-notes-${version}.md`);
+        try {
+          writeFileSync(tmpFile, response.text, 'utf-8');
+          console.log(chalk.dim(`\nCreating GitHub release ${version}...`));
+          execSync(
+            `gh release create "${version}" --title "${version}" --notes-file "${tmpFile}"`,
+            { stdio: 'inherit' },
+          );
+          console.log(chalk.green(`\n✅ GitHub Release ${version} created!`));
+        } catch (err: any) {
+          console.log(chalk.yellow('\n⚠ Failed to create GitHub release. Is `gh` CLI installed and logged in?'));
+          console.log(chalk.dim(`  You can manually create it with the notes above.`));
+        } finally {
+          try { unlinkSync(tmpFile); } catch {}
+        }
       }
     } catch (error: any) {
       spinner.stop();

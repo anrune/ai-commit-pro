@@ -14,6 +14,7 @@ export const prCommand = new Command('pr')
   .description('Generate a PR title and description from branch diff')
   .option('-t, --target <branch>', 'Target branch', 'main')
   .option('-m, --model <model>', 'Override the LLM model')
+  .option('-l, --lang <lang>', 'PR description language (en/zh)', 'en')
   .option('-d, --dry-run', 'Show without creating PR')
   .action(async (options) => {
     const spinner = ora();
@@ -68,6 +69,7 @@ export const prCommand = new Command('pr')
         branchName,
         targetBranch: options.target,
         repoInfo,
+        extra: { lang: options.lang || 'en' },
       });
 
       const startTime = Date.now();

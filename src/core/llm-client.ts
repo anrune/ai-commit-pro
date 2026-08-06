@@ -76,13 +76,23 @@ export class LLMClient {
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userMessage },
       ],
+      // 禁用 reasoning/thinking 模式，避免消耗大量 token 输出思考过程
+      ...(this.config.provider === 'deepseek'
+        ? { thinking: { type: 'disabled' } as any }
+        : {}),
     });
+
+    const choice = response.choices[0];
+    const msg = choice?.message as any;
+
+    // content 是最终回答，reasoning_content 是思考过程（仅 content 为空时兜底）
+    const text = msg?.content || msg?.reasoning_content || '';
 
     const inputTokens = response.usage?.prompt_tokens || 0;
     const outputTokens = response.usage?.completion_tokens || 0;
 
     return {
-      text: response.choices[0]?.message?.content || '',
+      text,
       usage: {
         inputTokens,
         outputTokens,
