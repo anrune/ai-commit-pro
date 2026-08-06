@@ -29,26 +29,38 @@ program
     'after',
     `
 📋 Quick Start:
-  ai-commit                Generate a commit message from staged changes
-  ai-commit pr             Generate a PR description from branch diff
-  ai-commit changelog      Generate CHANGELOG.md from commit history
-  ai-commit release        Generate GitHub Release Notes
-  ai-commit providers      List all supported LLM providers
+  ai-commit                         Generate a commit message from staged changes
+  ai-commit commit -a               Stage all changes + generate message
+  ai-commit pr                       Generate a PR description from branch diff
+  ai-commit changelog                Generate CHANGELOG.md from commit history
+  ai-commit release                  Generate GitHub Release Notes
+  ai-commit providers                List all supported LLM providers
 
-🔧 Configuration:
-  Set your API key via environment variable:
-    macOS/Linux:
-      export DEEPSEEK_API_KEY=sk-xxx      # DeepSeek（推荐）
-      export DASHSCOPE_API_KEY=sk-xxx     # 通义千问
-      export ZHIPU_API_KEY=xxx            # 智谱 GLM
-    Windows PowerShell:
-      $env:DEEPSEEK_API_KEY = "sk-xxx"    # DeepSeek（推荐）
-      $env:DASHSCOPE_API_KEY = "sk-xxx"   # 通义千问
-      $env:ZHIPU_API_KEY = "xxx"          # 智谱 GLM
+🔑 API Key (one-time setup — survives terminal restart):
 
-  Or create a config file (.ai-commit.yml):
-    provider: deepseek
-    apiKey: sk-xxx
+  ── Windows (PowerShell, run once as regular user) ──
+  [Environment]::SetEnvironmentVariable('DEEPSEEK_API_KEY', 'sk-xxx', 'User')
+  [Environment]::SetEnvironmentVariable('DASHSCOPE_API_KEY', 'sk-xxx', 'User')
+  [Environment]::SetEnvironmentVariable('ZHIPU_API_KEY', 'xxx', 'User')
+
+  ── macOS / Linux (add to ~/.zshrc or ~/.bashrc) ──
+  export DEEPSEEK_API_KEY=sk-xxx      # DeepSeek（推荐）
+  export DASHSCOPE_API_KEY=sk-xxx     # 通义千问
+  export ZHIPU_API_KEY=xxx            # 智谱 GLM
+  export MOONSHOT_API_KEY=sk-xxx      # Kimi
+  export SILICONFLOW_API_KEY=sk-xxx   # SiliconFlow
+
+  ── Or use a config file (.ai-commit.yml) ──
+  provider: deepseek
+  apiKey: sk-xxx
+
+  After setting, RESTART your terminal/IDE to pick up the new variable.
+  Verify: echo $env:DEEPSEEK_API_KEY  (Windows)  or  echo $DEEPSEEK_API_KEY  (Unix)
+
+💡 Tips:
+  • Press 'e' at the [Y/n/e] prompt to edit the commit message in your editor
+  • Default provider is DeepSeek (cheapest). Other providers auto-detected by which key is set.
+  • Run ai-commit providers to see all supported models and their pricing.
 
 📦 Resources:
   GitHub: https://github.com/anrune/ai-commit-pro
