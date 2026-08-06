@@ -16,7 +16,7 @@
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "tsc && node scripts/copy-templates.js"
   },
   "keywords": [
     "ai",
