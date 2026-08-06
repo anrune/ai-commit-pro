@@ -35,6 +35,7 @@ export interface PromptContext {
   tags?: string[];
   repoInfo?: RepoInfo;
   extra?: Record<string, string>;
+  suggestedScope?: string;  // 根据变更文件路径推断的 scope
 }
 
 // ── Commit 信息 ──

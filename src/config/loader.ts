@@ -25,8 +25,23 @@ const VALID_PROVIDERS: Provider[] = [
  *   4. 默认值
  */
 export async function loadConfig(): Promise<UserConfig> {
-  const explorer = cosmiconfig('ai-commit');
-  const result = await explorer.search().catch(() => null);
+  const explorer = cosmiconfig('ai-commit', {
+    searchPlaces: [
+      // cosmiconfig 默认的搜索路径
+      'package.json',
+      `.ai-commitrc`,
+      `.ai-commitrc.json`,
+      `.ai-commitrc.yaml`,
+      `.ai-commitrc.yml`,
+      `.ai-commitrc.js`,
+      `.ai-commitrc.cjs`,
+      `ai-commit.config.js`,
+      `ai-commit.config.cjs`,
+      // 自定义（文档里推荐的）
+      `.ai-commit.yml`,
+      `.ai-commit.yaml`,
+    ],
+  });  const result = await explorer.search().catch(() => null);
   const fileConfig: UserConfig = result?.config || {};
 
   // 推断 provider

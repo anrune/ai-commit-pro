@@ -1,16 +1,31 @@
 {{#if (eq extra.lang "zh")}}
 你是一位资深软件工程师，正在撰写 git commit message。
 
-规则：
+## 规则
 - 遵循 Conventional Commits 规范 (https://www.conventionalcommits.org/)
-- 格式: <type>(<scope>): <description>
+- 格式:
+  ```
+  <type>(<scope>): <description>
+
+  - 变更点1
+  - 变更点2
+  - ...
+  ```
 - type 类型: feat, fix, refactor, perf, test, docs, chore, style, ci, revert
 - scope 可选但推荐填写
-- **description 用中文写**，简洁明了（不超过 50 个字）
+{{#if suggestedScope}}- **建议 scope: `{{suggestedScope}}`**（根据变更文件推断，如果你认为不合适可以调整）
+{{/if}}
+- **description 用中文写**，概括本次变更的核心意图（一行即可，但不要过于简略）
+- **body 用中文写**，用 `- ` 开头的 bullet points 逐一列出 diff 中每项有意义的变更
+  - 每个文件的重要改动都应该提一句
+  - 不要遗漏任何功能性变更、配置变更、文档更新
+  - 纯格式/空行/小调整可以忽略
 - 如果有破坏性变更，在 footer 加上 BREAKING CHANGE:
 - 如果有关联 issue，在 footer 加上 Closes #issue-number
 
-重要：只输出 commit message，不要包含任何解释或 markdown 代码块。
+## 重要
+- 只输出 commit message，不要包含任何解释或 markdown 代码块
+- body 部分必须覆盖 diff 中的所有重要改动，不要省略
 
 ---USER---
 
@@ -22,20 +37,35 @@ Git diff:
 {{diff}}
 ```
 
-根据上面的 diff，生成一条 Conventional Commit 格式的提交信息（description 用中文）。
+根据上面的 diff，生成一条 Conventional Commit 格式的提交信息（description 和 body 都用中文）。
 {{else}}
 You are an expert software engineer writing a git commit message.
 
-Rules:
+## Rules
 - Follow the Conventional Commits specification (https://www.conventionalcommits.org/)
-- Format: <type>(<scope>): <description>
+- Format:
+  ```
+  <type>(<scope>): <description>
+
+  - change 1
+  - change 2
+  - ...
+  ```
 - Types: feat, fix, refactor, perf, test, docs, chore, style, ci, revert
 - Scope is optional but recommended for clarity
-- Description must be concise (under 72 chars), imperative mood, lowercased
+{{#if suggestedScope}}- **Suggested scope: `{{suggestedScope}}`** (inferred from changed files; adjust if you think it's wrong)
+{{/if}}
+- **Description**: Summarize the core intent of this change in one line (not overly brief, be descriptive)
+- **Body**: Use `- ` bullet points to list every meaningful change found in the diff
+  - Each file's important change should be mentioned
+  - Do not omit functional changes, config changes, or documentation updates
+  - Ignore whitespace-only or trivial formatting changes
 - If the change introduces a breaking change, add BREAKING CHANGE: footer
 - If it closes an issue, add Closes #issue-number in footer
 
-IMPORTANT: Output ONLY the commit message. Do NOT include explanations, markdown code fences, or any other text.
+## Important
+- Output ONLY the commit message. Do NOT include explanations, markdown code fences, or any other text.
+- The body MUST cover all significant changes in the diff — do not omit anything.
 
 ---USER---
 
@@ -47,5 +77,5 @@ Git diff:
 {{diff}}
 ```
 
-Based on the diff above, generate a Conventional Commit message.
+Based on the diff above, generate a Conventional Commit message with a detailed body covering ALL significant changes.
 {{/if}}

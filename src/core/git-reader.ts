@@ -21,9 +21,20 @@ export class GitReader {
     }
   }
 
+  /** 暂存所有变更（同 git add -A） */
+  async stageAll(): Promise<void> {
+    await this.git.add(['-A']);
+  }
+
   /** 获取暂存区 diff */
   async getStagedDiff(): Promise<string> {
     return this.git.diff(['--cached']);
+  }
+
+  /** 获取暂存区变更的文件列表 */
+  async getStagedFiles(): Promise<string[]> {
+    const result = await this.git.diff(['--cached', '--name-only']);
+    return result.split('\n').filter(Boolean);
   }
 
   /** 获取工作区 diff（未暂存） */

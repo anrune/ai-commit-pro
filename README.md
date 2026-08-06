@@ -187,6 +187,8 @@ cp node_modules/ai-commit-pro/dist/templates/commit.hbs .ai-commit/templates/
 
 ## 🗺️ 路线图
 
+### 已完成
+
 - [x] `ai-commit` — 提交信息生成
 - [x] `ai-commit pr` — PR 描述生成
 - [x] `ai-commit changelog` — 变更日志生成
@@ -194,10 +196,32 @@ cp node_modules/ai-commit-pro/dist/templates/commit.hbs .ai-commit/templates/
 - [x] `ai-commit providers` — 列出模型平台
 - [x] 🇨🇳 国内模型支持（DeepSeek, 通义千问, GLM, Kimi, 硅基流动）
 - [x] 🇨🇳 中文 commit message 输出
-- [ ] 编辑器模式 — 提交前手动编辑 message
-- [ ] GitHub CLI 集成 — `--create` 直接创建 PR/Release
-- [ ] Git hooks — `prepare-commit-msg` hook 集成
-- [ ] 团队配置 — 共享 `.ai-commit.yml` 模板
+- [x] 编辑器模式 — 提交前按 `e` 打开编辑器手动修改 message
+- [x] 自定义 Prompt 模板（Handlebars）
+
+### 高优先级
+
+- [ ] **`--all` 参数实现** — `-a` 选项声明了但未生效，需自动执行 `git add -A`
+- [ ] **scope 自动检测** — 根据变更文件路径推断 scope（如 `src/auth/` → `feat(auth):`）
+- [ ] **Claude 原生支持** — 已安装 `@anthropic-ai/sdk`，接入 Claude API（commit message 质量很高）
+- [ ] **commit body 生成** — `--verbose` 模式生成带 bullet points 的详细 body
+
+### 中优先级
+
+- [ ] **prepare-commit-msg hook** — 支持配成 Git hook，`git commit` 时自动调 AI 生成 message
+- [ ] **自定义 Provider** — `.ai-commit.yml` 中配置任意 OpenAI 兼容端点（Ollama、公司代理等）
+- [ ] **重试/换模型** — 不满意时按 `r` 重新生成，支持切换 provider 再试
+- [ ] **多模型对比** — `ai-commit --compare` 同时调多个 provider，展示结果让用户选
+- [ ] **pr --publish** — PR 命令加 `--publish` 直接调 `gh pr create` 创建 PR
+- [ ] **changelog 缓存** — 同一段 commit range 缓存结果，避免重复调 API
+
+### 低优先级
+
+- [ ] **交互式向导** — `--wizard` 逐步询问改动类型、影响范围、是否有 breaking change
+- [ ] **commit 后行为链** — `--push` 自动推送，`--pr` commit 后自动打开 PR
+- [ ] **emoji 支持** — `--emoji` 使用 gitmoji 风格（`✨ feat:`, `🐛 fix:` 等）
+- [ ] **更多语言** — 支持日语、韩语、葡萄牙语等 commit message
+- [ ] **pre-commit 检查** — `--lint` 验证生成的 message 是否符合 Conventional Commits 规范
 
 ---
 
