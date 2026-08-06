@@ -74,10 +74,11 @@ ai-commit
 
 ## 📖 使用
 
-### Commit（`ai-commit`）
+### Commit（`ai-commit` / `ai-commit c`）
 
 ```bash
 ai-commit                  # 从 staged diff 生成 commit message
+ai-commit -a               # 自动 git add -A 暂存所有改动
 ai-commit --dry-run        # 预览，不执行提交
 ai-commit --yes            # 跳过确认，直接提交
 ai-commit --lang zh        # 中文 commit message
@@ -85,32 +86,39 @@ ai-commit --provider deepseek  # 指定 Provider
 ai-commit --model deepseek-v4-flash  # 指定模型
 ```
 
-### PR（`ai-commit pr`）
+### PR（`ai-commit pr` / `ai-commit p`）
 
 ```bash
 ai-commit pr                          # 生成 PR 描述（对比 main）
+ai-commit pr --lang zh                # 中文 PR 描述
 ai-commit pr --target develop         # 指定目标分支
+ai-commit pr --model deepseek-v4-flash  # 指定模型
 ai-commit pr --dry-run                # 仅预览
 ```
 
-### Changelog（`ai-commit changelog`）
+### Changelog（`ai-commit changelog` / `ai-commit cl`）
 
 ```bash
 ai-commit changelog                          # 从最近 50 条 commit 生成
+ai-commit changelog --lang zh                # 中文 CHANGELOG
 ai-commit changelog --from v1.0.0 --to HEAD  # 指定范围
 ai-commit changelog --output CHANGELOG.md     # 写入文件
+ai-commit changelog --output CHANGELOG.md --append  # 追加到已有文件
 ```
 
-### Release（`ai-commit release`）
+### Release（`ai-commit release` / `ai-commit r`）
 
 ```bash
 ai-commit release --from v1.0.0 --release-version v1.1.0  # 生成 Release Notes
+ai-commit release --from v1.0.0 --release-version v1.1.0 --lang zh  # 中文 Release Notes
+ai-commit release --from v1.0.0 --release-version v1.1.0 --lang zh --publish  # 生成并发布到 GitHub
+ai-commit release --from v1.0.0 --to v1.0.5 --release-version v1.1.0  # 指定起止范围
 ```
 
-### Providers（`ai-commit providers`）
+### Providers（`ai-commit providers` / `ai-commit ls`）
 
 ```bash
-ai-commit providers  # 列出所有支持的模型平台
+ai-commit providers  # 列出所有支持的模型平台（含价格和默认模型）
 ```
 
 ---
@@ -130,18 +138,18 @@ export SILICONFLOW_API_KEY=sk-xxx    # 硅基流动
 
 ```
 
-**Windows PowerShell：**
+**Windows PowerShell（运行一次永久生效）：**
 
 ```powershell
-$env:DEEPSEEK_API_KEY = "sk-xxx"     # DeepSeek（推荐）
-$env:DASHSCOPE_API_KEY = "sk-xxx"    # 通义千问
-$env:ZHIPU_API_KEY = "xxx"           # 智谱 GLM
-$env:MOONSHOT_API_KEY = "sk-xxx"     # Kimi
-$env:SILICONFLOW_API_KEY = "sk-xxx"  # 硅基流动
+[Environment]::SetEnvironmentVariable('DEEPSEEK_API_KEY', 'sk-xxx', 'User')     # DeepSeek（推荐）
+[Environment]::SetEnvironmentVariable('DASHSCOPE_API_KEY', 'sk-xxx', 'User')    # 通义千问
+[Environment]::SetEnvironmentVariable('ZHIPU_API_KEY', 'xxx', 'User')           # 智谱 GLM
+[Environment]::SetEnvironmentVariable('MOONSHOT_API_KEY', 'sk-xxx', 'User')     # Kimi
+[Environment]::SetEnvironmentVariable('SILICONFLOW_API_KEY', 'sk-xxx', 'User')  # 硅基流动
 ```
 
-```
-
+> ⚠️ 设置后需**重启终端**（或 IDE）才能生效。
+>
 > 💡 不需要配 `AI_COMMIT_PROVIDER`，配好 Key 后自动检测。
 
 ### 方式 2：配置文件
@@ -198,13 +206,17 @@ cp node_modules/ai-commit-pro/dist/templates/commit.hbs .ai-commit/templates/
 - [x] 🇨🇳 中文 commit message 输出
 - [x] 编辑器模式 — 提交前按 `e` 打开编辑器手动修改 message
 - [x] 自定义 Prompt 模板（Handlebars）
+- [x] `--all` 自动暂存 — `-a` 自动执行 `git add -A`
+- [x] scope 自动检测 — 根据变更文件路径推断 scope
+- [x] 详细 commit body — 自动生成带 bullet points 的变更列表
+- [x] 全命令中文支持 — commit / pr / changelog / release 均支持 `--lang zh`
+- [x] Release 一键发布 — `--publish` 直接创建 GitHub Release
+- [x] API Key 持久化指引 — `--help` 内置 Windows / macOS / Linux 配置方法
 
 ### 高优先级
 
-- [ ] **`--all` 参数实现** — `-a` 选项声明了但未生效，需自动执行 `git add -A`
-- [ ] **scope 自动检测** — 根据变更文件路径推断 scope（如 `src/auth/` → `feat(auth):`）
 - [ ] **Claude 原生支持** — 已安装 `@anthropic-ai/sdk`，接入 Claude API（commit message 质量很高）
-- [ ] **commit body 生成** — `--verbose` 模式生成带 bullet points 的详细 body
+- [ ] **pr --publish** — PR 命令加 `--publish` 直接调 `gh pr create` 创建 PR
 
 ### 中优先级
 
@@ -212,7 +224,6 @@ cp node_modules/ai-commit-pro/dist/templates/commit.hbs .ai-commit/templates/
 - [ ] **自定义 Provider** — `.ai-commit.yml` 中配置任意 OpenAI 兼容端点（Ollama、公司代理等）
 - [ ] **重试/换模型** — 不满意时按 `r` 重新生成，支持切换 provider 再试
 - [ ] **多模型对比** — `ai-commit --compare` 同时调多个 provider，展示结果让用户选
-- [ ] **pr --publish** — PR 命令加 `--publish` 直接调 `gh pr create` 创建 PR
 - [ ] **changelog 缓存** — 同一段 commit range 缓存结果，避免重复调 API
 
 ### 低优先级

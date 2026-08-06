@@ -58,8 +58,11 @@ Commit with this message? [Y/n/e] y
 # Install
 npm install -g ai-commit-pro
 
-# Set API key
+# Set API key (macOS / Linux)
 export DEEPSEEK_API_KEY=sk-xxx
+
+# Or Windows PowerShell (run once, permanent):
+# [Environment]::SetEnvironmentVariable('DEEPSEEK_API_KEY', 'sk-xxx', 'User')
 
 # Stage and commit
 git add .
@@ -72,10 +75,11 @@ ai-commit
 
 ## 📖 Usage
 
-### Commit
+### Commit (`ai-commit` / `ai-commit c`)
 
 ```bash
 ai-commit                  # Generate commit message from staged diff
+ai-commit -a               # Auto git add -A before generating
 ai-commit --dry-run        # Preview without committing
 ai-commit --yes            # Skip confirmation
 ai-commit --lang zh        # Output in Chinese
@@ -83,32 +87,39 @@ ai-commit --provider deepseek  # Override provider
 ai-commit --model deepseek-v4-flash  # Override model
 ```
 
-### PR
+### PR (`ai-commit pr` / `ai-commit p`)
 
 ```bash
 ai-commit pr                          # Generate PR description (vs main)
+ai-commit pr --lang zh                # Chinese PR description
 ai-commit pr --target develop         # Specify target branch
+ai-commit pr --model deepseek-v4-flash  # Override model
 ai-commit pr --dry-run                # Preview only
 ```
 
-### Changelog
+### Changelog (`ai-commit changelog` / `ai-commit cl`)
 
 ```bash
 ai-commit changelog                          # From last 50 commits
+ai-commit changelog --lang zh                # Chinese CHANGELOG
 ai-commit changelog --from v1.0.0 --to HEAD  # Specify range
 ai-commit changelog --output CHANGELOG.md     # Write to file
+ai-commit changelog --output CHANGELOG.md --append  # Append to existing file
 ```
 
-### Release
+### Release (`ai-commit release` / `ai-commit r`)
 
 ```bash
 ai-commit release --from v1.0.0 --release-version v1.1.0  # Generate Release Notes
+ai-commit release --from v1.0.0 --release-version v1.1.0 --lang zh  # Chinese Release Notes
+ai-commit release --from v1.0.0 --release-version v1.1.0 --lang zh --publish  # Generate + publish to GitHub
+ai-commit release --from v1.0.0 --to v1.0.5 --release-version v1.1.0  # Specify end range
 ```
 
-### Providers
+### Providers (`ai-commit providers` / `ai-commit ls`)
 
 ```bash
-ai-commit providers  # List all supported platforms
+ai-commit providers  # List all supported platforms with pricing and default models
 ```
 
 ---
@@ -127,15 +138,17 @@ export MOONSHOT_API_KEY=sk-xxx       # Kimi
 export SILICONFLOW_API_KEY=sk-xxx    # SiliconFlow
 ```
 
-**Windows PowerShell:**
+**Windows PowerShell (run once, persists permanently):**
 
 ```powershell
-$env:DEEPSEEK_API_KEY = "sk-xxx"     # DeepSeek (recommended)
-$env:DASHSCOPE_API_KEY = "sk-xxx"    # Qwen
-$env:ZHIPU_API_KEY = "xxx"           # GLM
-$env:MOONSHOT_API_KEY = "sk-xxx"     # Kimi
-$env:SILICONFLOW_API_KEY = "sk-xxx"  # SiliconFlow
+[Environment]::SetEnvironmentVariable('DEEPSEEK_API_KEY', 'sk-xxx', 'User')     # DeepSeek (recommended)
+[Environment]::SetEnvironmentVariable('DASHSCOPE_API_KEY', 'sk-xxx', 'User')    # Qwen
+[Environment]::SetEnvironmentVariable('ZHIPU_API_KEY', 'xxx', 'User')           # GLM
+[Environment]::SetEnvironmentVariable('MOONSHOT_API_KEY', 'sk-xxx', 'User')     # Kimi
+[Environment]::SetEnvironmentVariable('SILICONFLOW_API_KEY', 'sk-xxx', 'User')  # SiliconFlow
 ```
+
+> ⚠️ Restart your terminal (or IDE) after setting for changes to take effect.
 
 ### Config File
 
@@ -182,13 +195,37 @@ Templates use Handlebars syntax. Separate system and user prompts with `---USER-
 
 ## 🗺️ Roadmap
 
+### Completed
+
 - [x] Commit, PR, Changelog, Release generation
 - [x] Chinese providers (DeepSeek, Qwen, GLM, Kimi, SiliconFlow)
-- [x] Chinese language output
-- [ ] Editor mode — edit message before committing
-- [ ] GitHub CLI integration — `--create` flag for direct PR/Release creation
-- [ ] Git hooks — `prepare-commit-msg` hook
-- [ ] Team config — shareable `.ai-commit.yml` templates
+- [x] Chinese language output for all commands
+- [x] Editor mode — press `e` to edit message before committing
+- [x] `--all` auto-staging — `-a` runs `git add -A`
+- [x] Scope auto-detection from changed file paths
+- [x] Detailed commit body with bullet points
+- [x] Release `--publish` — one-click GitHub Release creation
+- [x] API key setup guide in `--help` (Windows/macOS/Linux)
+
+### High Priority
+
+- [ ] **Native Claude support** — Anthropic SDK integration for higher quality messages
+- [ ] **pr --publish** — direct `gh pr create` from CLI
+
+### Medium Priority
+
+- [ ] **prepare-commit-msg hook** — auto-generate on any `git commit`
+- [ ] **Custom Provider** — any OpenAI-compatible endpoint (Ollama, proxies, etc.)
+- [ ] **Retry / switch model** — press `r` to regenerate, switch providers on the fly
+- [ ] **Multi-model compare** — `ai-commit --compare` to pick the best result
+- [ ] **Changelog cache** — cache results for the same commit range
+
+### Low Priority
+
+- [ ] **Interactive wizard** — `--wizard` step-by-step commit crafting
+- [ ] **Post-commit actions** — `--push` auto-push, `--pr` auto-open PR
+- [ ] **Emoji support** — gitmoji style (`✨ feat:`, `🐛 fix:`)
+- [ ] **Pre-commit lint** — `--lint` validate against Conventional Commits spec
 
 ---
 
